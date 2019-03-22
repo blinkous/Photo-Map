@@ -9,8 +9,9 @@
 import UIKit
 import MapKit
 
-class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate {
+class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBOutlet weak var mapView: MKMapView!
+    var pickedImage: UIImage!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +46,33 @@ class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate 
     }
     
     @IBAction func onCameraButton(_ sender: Any) {
+        let vc = UIImagePickerController()
+        vc.delegate = self
+        vc.allowsEditing = true
         
+        // Check to see if the device has a camera
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            print("Camera is available 📸")
+            vc.sourceType = .camera
+        } else {
+            print("Camera 🚫 available so we will use photo library instead")
+            vc.sourceType = .photoLibrary
+        }
+        // Present the view controller
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let originalImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
+        let editedImage = info[UIImagePickerController.InfoKey.editedImage] as! UIImage
+        
+        // Do something with the images (based on your use case)
+        pickedImage = editedImage
+        
+        // Dismiss UIImagePickerController to go back to your original view controller
+        dismiss(animated: true) {
+            self.performSegue(withIdentifier: "tagSegue", sender: nil)
+        }
     }
     
 }
