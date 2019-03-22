@@ -32,6 +32,14 @@ class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate,
     
     func locationsPickedLocation(controller: LocationsViewController, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         print("location picked")
+        
+        // From https://guides.codepath.org/ios/Using-MapKit#drop-pins-at-locations
+        // Making pins using map kit
+        let annotation = MKPointAnnotation()
+        let locationCoordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        annotation.coordinate = locationCoordinate
+        annotation.title = String(describing: latitude)
+        mapView.addAnnotation(annotation)
     }
     
     // MARK: - Navigation
@@ -63,7 +71,7 @@ class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate,
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        let originalImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
+//        let originalImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
         let editedImage = info[UIImagePickerController.InfoKey.editedImage] as! UIImage
         
         // Do something with the images (based on your use case)
